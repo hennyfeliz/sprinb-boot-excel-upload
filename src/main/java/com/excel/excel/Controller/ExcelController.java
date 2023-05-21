@@ -1,7 +1,9 @@
 package com.excel.excel.Controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import com.excel.excel.Repository.TutorialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,24 @@ public class ExcelController {
 
   @Autowired
   ExcelService fileService;
+
+  @Autowired
+  TutorialRepository tutorialRepository;
+
+  @GetMapping("/tutorialsData")
+  public ResponseEntity<List<Tutorial>> getAllData(){
+    try {
+      List<Tutorial> tutorials = tutorialRepository.findAll();
+      
+      if (tutorials.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+
+      return new ResponseEntity<>(tutorials, HttpStatus.OK);
+    }catch (Exception e) {
+        return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
   @PostMapping("/upload")
   public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
