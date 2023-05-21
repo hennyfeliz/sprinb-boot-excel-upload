@@ -1,5 +1,6 @@
 package com.excel.excel.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,6 +24,13 @@ public class ExcelService {
     } catch (IOException e) {
       throw new RuntimeException("fail to store excel data: " + e.getMessage());
     }
+  }
+
+  public ByteArrayInputStream load() {
+    List<Tutorial> tutorials = repository.findAll();
+
+    ByteArrayInputStream in = ExcelHelper.tutorialsToExcel(tutorials);
+    return in;
   }
 
   public List<Tutorial> getAllTutorials() {
